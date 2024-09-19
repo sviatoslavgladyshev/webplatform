@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0a0c1b;
+            color: black;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            background-color: #f97316;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        nav button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        nav button.active {
+            background-color: #1e2235;
+            border-radius: 4px;
+        }
+        .date-range {
+            background-color: #1e2235;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .dashboard-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .company-score {
+            text-align: center;
+        }
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        .score-value {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .score-label {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .weekly-change {
+            display: flex;
+            justify-content: space-between;
+            color: #ef4444;
+            margin-top: 20px;
+        }
+        .top-performers li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .performer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4b5563;
+            margin-right: 10px;
+        }
+        .performer-name {
+            flex-grow: 1;
+        }
+        .performer-score {
+            font-weight: bold;
+        }
+        .more-performers {
+            background-color: #2a2f4a;
+            border: none;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .insights table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .insights th, .insights td {
+            text-align: right;
+            padding: 10px 5px;
+        }
+        .insights th:first-child, .insights td:first-child {
+            text-align: left;
+        }
+        .insights .positive {
+            color: #4ade80;
+        }
+        .insights .negative {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">Y</span>
+                <span>Combinator</span>
+            </div>
+            <nav>
+                <button class="active">Overview</button>
+                <button>Employee</button>
+                <button>Admin</button>
+            </nav>
+            <div>
+                <button class="active">Company</button>
+                <span class="date-range">9/2 - 9/6</span>
+            </div>
+        </header>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-item company-score">
+                <h2>Company Score</h2>
+                <div class="score-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#4ade80" stroke-width="10" stroke-dasharray="250" stroke-dashoffset="30" />
+                        <text x="50" y="50" text-anchor="middle" dominant-baseline="central" class="score-value">86</text>
+                    </svg>
+                </div>
+                <div class="score-label">Very Good</div>
+                <div class="weekly-change">
+                    <span>Weekly Change</span>
+                    <span>↓ 2 points</span>
+                </div>
+            </div>
+            
+            <div class="dashboard-item">
+                <h2>Performance</h2>
+                <canvas id="performanceChart"></canvas>
+            </div>
+            
+            <div class="dashboard-item">
+                <h2>Top Performers</h2>
+                <ul class="top-performers">
+                    <li>
+                        <div class="performer-avatar"></div>
+                        <span class="performer-name">Paul Graham</span>
+                        <span class="performer-score">81,660 xp</span>
+                    </li>
+                    <li>
+                        <div class="performer-avatar"></div>
+                        <span class="performer-name">Sam Altman</span>
+                        <span class="performer-score">78,445 xp</span>
+                    </li>
+                    <li>
+                        <div class="performer-avatar"></div>
+                        <span class="performer-name">Gary Tan</span>
+                        <span class="performer-score">71,800 xp</span>
+                    </li>
+                </ul>
+                <button class="more-performers">More Performers...</button>
+            </div>
+            
+            <div class="dashboard-item insights">
+                <h2>Insights</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>This Week</th>
+                            <th>Last Week</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Sales</td>
+                            <td>$7,680</td>
+                            <td>$5,771</td>
+                            <td class="positive">↑ 13.1%</td>
+                        </tr>
+                        <tr>
+                            <td>Total XP</td>
+                            <td>96,425</td>
+                            <td>100</td>
+                            <td class="positive">↑ 21.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Employee Growth</td>
+                            <td>0.1%</td>
+                            <td>0.3%</td>
+                            <td class="negative">↓ 66.6%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['8/2', '8/9', '8/16', '8/23'],
+                datasets: [{
+                    label: 'Actual',
+                    data: [600000, 750000, 850000, 1000000],
+                    borderColor: 'rgb(59, 130, 246)',
+                    tension: 0.1,
+                    fill: false
+                }, {
+                    label: 'Target',
+                    data: [650000, 800000, 500000, 1050000],
+                    borderColor: 'rgb(249, 115, 22)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            },
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

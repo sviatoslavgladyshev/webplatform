@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Cognito</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1231.0.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #007bff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            position: relative;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #007bff;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            display: none;
+            margin-left: 0.5rem;
+        }
+
+        button.loading .spinner {
+            display: inline;
+        }
+
+        button.loading .loading-text {
+            display: inline;
+        }
+
+        button.loading .default-text {
+            display: none;
+        }
+    </style>
+    <script>
+        AWS.config.region = 'us-east-1';
+        const cognito = new AWS.CognitoIdentityServiceProvider();
+        const userPoolId = 'us-east-1_uKIraXNQg';
+        const clientId = '4p9udg72onl3movcn1cjd78llg';
+
+        async function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const button = document.getElementById('loginButton');
+            const spinner = document.getElementById('spinner');
+            const loadingText = document.getElementById('loadingText');
+            const defaultText = document.getElementById('defaultText');
+
+            button.disabled = true;
+            button.classList.add('loading');
+            spinner.style.display = 'inline-block';
+            loadingText.style.display = 'inline';
+            defaultText.style.display = 'none';
+
+            try {
+                const authParams = {
+                    AuthFlow: 'USER_PASSWORD_AUTH',
+                    ClientId: clientId,
+                    AuthParameters: {
+                        USERNAME: email,
+                        PASSWORD: password
+                    }
+                };
+
+                const loginResult = await cognito.initiateAuth(authParams).promise();
+                const idToken = loginResult.AuthenticationResult.IdToken;
+                localStorage.setItem('idToken', idToken);  // Store the ID token
+                window.location.href = 'dashboard.html';  // Redirect to the dashboard page
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.classList.remove('loading');
+                spinner.style.display = 'none';
+                loadingText.style.display = 'none';
+                defaultText.style.display = 'inline';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form onsubmit="login(event)">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button id="loginButton" type="submit">
+                <span id="spinner" class="spinner"></span>
+                <span id="loadingText" class="loading-text">Loading...</span>
+                <span id="defaultText" class="default-text">Log In</span>
+            </button>
+        </form>
+    </div>
+</body>
+</html>

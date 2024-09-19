@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const token = localStorage.getItem('idToken');
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const username = decodedToken['cognito:username']; // Adjust this based on your token claims
+                document.getElementById('username').textContent = username;
+            } else {
+                window.location.href = 'login.html';  // Redirect to login if no token is found
+            }
+        });
+
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome, <span id="username"></span>!</h1>
+</body>
+</html>

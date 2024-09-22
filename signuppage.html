@@ -10,184 +10,335 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e0e0e0;
+            background: linear-gradient(-45deg, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
             color: #333;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .signup-container {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 360px;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1, h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
             text-align: center;
         }
 
-        h1 {
+        .input-group {
+            position: relative;
             margin-bottom: 1.5rem;
-            color: #007bff;
-        }
-
-        h2 {
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            color: #007bff;
         }
 
         label {
             display: block;
             margin-bottom: 0.5rem;
             color: #555;
-            text-align: left;
+            font-weight: 600;
         }
 
-        input {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
             width: 100%;
             padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s ease;
         }
 
-        input:focus {
-            border-color: #007bff;
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #23a6d5;
             outline: none;
+            box-shadow: 0 0 0 2px rgba(35, 166, 213, 0.2);
+        }
+
+        .password-match {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .match { color: green; }
+        .no-match { color: red; }
+
+        .verification-code-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .verification-code-input {
+            width: 14%;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 0.5rem;
         }
 
         button {
-            position: relative;
             width: 100%;
             padding: 0.75rem;
-            background-color: #007bff;
+            background-color: #23a6d5;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; /* Ensure spinner and text fit within button */
+            position: relative;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #1c8ab1;
         }
 
         button:disabled {
-            background-color: #007bff;
+            background-color: #a8d4e5;
             cursor: not-allowed;
         }
 
         .spinner {
-            display: none; /* Hide spinner by default */
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #ffffff;
-            border-radius: 50%;
+            display: none;
             width: 20px;
             height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #ffffff;
             animation: spin 1s linear infinite;
-            margin-right: 0.5rem; /* Space between spinner and text */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            display: none; /* Hide loading text by default */
-            margin-left: 0.5rem; /* Space between text and spinner */
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         button.loading .spinner {
-            display: inline-block; /* Show spinner during loading */
+            display: block;
         }
 
-        button.loading .loading-text {
-            display: inline; /* Show loading text during loading */
+        button.loading .button-text {
+            visibility: hidden;
         }
 
-        button.loading .default-text {
-            display: none; /* Hide default text during loading */
+        #verification-section {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .resend-code {
+            margin-top: 1rem;
+            color: #23a6d5;
+            text-decoration: underline;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+        }
+
+        .resend-code:hover {
+            color: #1c8ab1;
         }
     </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Sign Up</h1>
+        <form id="signupForm">
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                <div id="password-match" class="password-match"></div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="show-password" onchange="togglePasswordVisibility()">
+                <label for="show-password">Show Password</label>
+            </div>
+
+            <button id="signupButton" type="submit">
+                <span class="spinner"></span>
+                <span class="button-text">Sign Up</span>
+            </button>
+        </form>
+
+        <div id="verification-section">
+            <h2>Verify Your Account</h2>
+            <form id="verificationForm">
+                <div class="input-group">
+                    <label for="verification-code">Verification Code</label>
+                    <div class="verification-code-group">
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                        <input type="text" class="verification-code-input" maxlength="1" pattern="\d" required>
+                    </div>
+                </div>
+            </form>
+            <div class="resend-code" onclick="resendVerificationCode()">Resend verification code</div>
+        </div>
+    </div>
+
     <script>
-        AWS.config.region = 'us-east-1'; // Update with your region
+        AWS.config.region = 'us-east-1'; 
         const cognito = new AWS.CognitoIdentityServiceProvider();
 
-        const userPoolId = 'us-east-1_uKIraXNQg'; // Replace with your User Pool ID
-        const clientId = '4p9udg72onl3movcn1cjd78llg'; // Replace with your actual Client ID from Cognito
+        const userPoolId = 'us-east-1_uKIraXNQg';
+        const clientId = '4p9udg72onl3movcn1cjd78llg';
 
-        async function signup(event) {
+        function togglePasswordVisibility() {
+            const passwordInputs = document.querySelectorAll('#password, #confirm-password');
+            const showPasswordCheckbox = document.getElementById('show-password');
+            
+            passwordInputs.forEach(input => {
+                input.type = showPasswordCheckbox.checked ? 'text' : 'password';
+            });
+        }
+
+        function setLoading(button, isLoading) {
+            if (isLoading) {
+                button.disabled = true;
+                button.classList.add('loading');
+            } else {
+                button.disabled = false;
+                button.classList.remove('loading');
+            }
+        }
+
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        const passwordMatch = document.getElementById('password-match');
+
+        function checkPasswordMatch() {
+            if (confirmPassword.value === '') {
+                passwordMatch.textContent = '';
+                passwordMatch.className = 'password-match';
+            } else if (password.value === confirmPassword.value) {
+                passwordMatch.textContent = 'Passwords match';
+                passwordMatch.className = 'password-match match';
+            } else {
+                passwordMatch.textContent = 'Passwords do not match';
+                passwordMatch.className = 'password-match no-match';
+            }
+        }
+
+        password.addEventListener('input', checkPasswordMatch);
+        confirmPassword.addEventListener('input', checkPasswordMatch);
+
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const button = document.getElementById('signupButton');
-            const spinner = document.getElementById('spinner');
-            const loadingText = document.getElementById('loadingText');
-            const defaultText = document.getElementById('defaultText');
+            const confirmPassword = document.getElementById('confirm-password').value;
 
-            button.disabled = true;
-            button.classList.add('loading');
-            spinner.style.display = 'inline-block'; // Display spinner
-            loadingText.style.display = 'inline';   // Display loading text
-            defaultText.style.display = 'none';     // Hide "Sign Up" text
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            const signupButton = document.getElementById('signupButton');
+            setLoading(signupButton, true);
 
             try {
                 const signupParams = {
                     ClientId: clientId,
-                    Username: name,  // Assign 'name' or a custom username instead of email
+                    Username: name,
                     Password: password,
                     UserAttributes: [
-                        {
-                            Name: 'email',
-                            Value: email
-                        },
-                        {
-                            Name: 'name',
-                            Value: name
-                        }
+                        { Name: 'email', Value: email },
+                        { Name: 'name', Value: name }
                     ]
                 };
-
-                const signupResult = await cognito.signUp(signupParams).promise();
-                console.log('Cognito Sign Up Success:', signupResult);
-
-                alert('Sign up successful! Please check your email for the verification code.');
+                await cognito.signUp(signupParams).promise();
                 document.getElementById('verification-section').style.display = 'block';
-
+                document.getElementById('signupForm').style.display = 'none';
             } catch (error) {
-                console.error('Cognito Sign Up Error:', error);
                 alert('Sign up failed: ' + error.message);
             } finally {
-                button.disabled = false;
-                button.classList.remove('loading');
-                spinner.style.display = 'none'; // Hide spinner
-                loadingText.style.display = 'none'; // Hide loading text
-                defaultText.style.display = 'inline'; // Show "Sign Up" text
+                setLoading(signupButton, false);
             }
-        }
+        });
 
-        async function confirmSignUp(event) {
-            event.preventDefault();
+        const verificationInputs = document.querySelectorAll('.verification-code-input');
+        verificationInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.inputType !== 'deleteContentBackward' && index < 5) {
+                    verificationInputs[index + 1].focus();
+                }
+                if (index === 5 && input.value !== '') {
+                    confirmSignUp();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && index > 0 && input.value === '') {
+                    verificationInputs[index - 1].focus();
+                }
+            });
+        });
 
+        async function confirmSignUp() {
             const name = document.getElementById('name').value;
-            const verificationCode = document.getElementById('verification-code').value;
+            const verificationCode = Array.from(verificationInputs).map(input => input.value).join('');
 
             try {
                 const confirmParams = {
@@ -195,51 +346,29 @@
                     Username: name,
                     ConfirmationCode: verificationCode
                 };
-
-                const confirmResult = await cognito.confirmSignUp(confirmParams).promise();
-                console.log('Cognito Confirm Sign Up Success:', confirmResult);
-
-                // alert('Verification successful! You can now log in.');
-                window.location.href = '../home/';
-
+                await cognito.confirmSignUp(confirmParams).promise();
+                window.location.href = 'home/index.html';
             } catch (error) {
-                console.error('Cognito Confirm Sign Up Error:', error);
                 alert('Verification failed: ' + error.message);
+                // Clear verification inputs on failure
+                verificationInputs.forEach(input => input.value = '');
+                verificationInputs[0].focus();
+            }
+        }
+
+        async function resendVerificationCode() {
+            const name = document.getElementById('name').value;
+            try {
+                const resendParams = {
+                    ClientId: clientId,
+                    Username: name
+                };
+                await cognito.resendConfirmationCode(resendParams).promise();
+                alert('Verification code resent. Please check your email.');
+            } catch (error) {
+                alert('Failed to resend verification code: ' + error.message);
             }
         }
     </script>
-</head>
-<body>
-    <div class="signup-container">
-        <h1>Sign Up</h1>
-        <form onsubmit="signup(event)">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <button id="signupButton" type="submit">
-                <span id="spinner" class="spinner"></span>
-                <span id="loadingText" class="loading-text">Loading...</span>
-                <span id="defaultText" class="default-text">Sign Up</span>
-            </button>
-        </form>
-
-        <div id="verification-section" style="display:none;">
-            <h2>Enter Verification Code</h2>
-            <form onsubmit="confirmSignUp(event)">
-                <label for="verification-code">Verification Code:</label>
-                <input type="text" id="verification-code" name="verification-code" required>
-
-                <button type="submit">
-                    Confirm Sign Up
-                </button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>

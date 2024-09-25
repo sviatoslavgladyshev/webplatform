@@ -1,177 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Dashboard</title>
-   <style>
-       body {
-           font-family: Arial, sans-serif;
-           margin: 0;
-           padding: 20px;
-           background-color: rgb(1, 3, 57);
-           color: #333;
-       }
-       .container {
-           max-width: 1200px;
-           margin: 0 auto;
-       }
-       .header {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           background-color: white;
-           border-radius: 10px;
-           padding: 10px 20px;
-           margin-bottom: 20px;
-       }
-       .logo {
-           display: flex;
-           align-items: center;
-       }
-       .logo-icon {
-           background-color: #47cbff;
-           color: white;
-           padding: 2px 6px;
-           border-radius: 4px;
-           margin-right: 6px;
-           font-weight: bold;
-           font-size: 14px;
-       }
-       .logo span {
-           color: #333;
-           font-weight: bold;
-           font-size: 14px;
-       }
-       .nav-tabs {
-           display: flex;
-           background-color: #f0f0f0;
-           border-radius: 8px;
-           overflow: hidden;
-           margin: 0 20px;
-       }
-       .nav-tabs button {
-           background-color: transparent;
-           border: none;
-           color: #333;
-           padding: 8px 16px;
-           cursor: pointer;
-           font-size: 14px;
-           font-weight: 500;
-           transition: background-color 0.3s;
-       }
-       .nav-tabs button.active {
-           background-color: rgb(1, 3, 57);
-           color: white;
-       }
-       .header-buttons {
-           display: flex;
-       }
-       .header-buttons button {
-           background-color: rgb(1, 3, 57);
-           border: none;
-           color: white;
-           padding: 8px 16px;
-           margin-left: 10px;
-           cursor: pointer;
-           border-radius: 8px;
-           font-size: 14px;
-           font-weight: 500;
-       }
-       .dashboard {
-           display: flex;
-           gap: 20px;
-           height: calc(100vh - 140px);
-       }
-       .left-column, .right-column {
-           display: flex;
-           flex-direction: column;
-       }
-       .left-column {
-           flex: 0 0 35%;
-       }
-       .right-column {
-           flex: 1;
-       }
-       .card {
-           background-color: white;
-           border-radius: 10px;
-           padding: 20px;
-           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-           display: flex;
-           flex-direction: column;
-       }
-       .company-score, .top-performers {
-           flex: 1;
-       }
-       .company-score {
-           margin-bottom: 20px;
-       }
-       .performance-insights {
-           flex: 1;
-       }
-       .card h2 {
-           margin-top: 0;
-           color: #333;
-           font-size: 18px;
-           margin-bottom: 20px;
-       }
-       .score-container {
-           position: relative;
-           width: 200px;
-           margin: 0 auto;
-       }
-       .score-content {
-           position: absolute;
-           bottom: 0;
-           width: 100%;
-           text-align: center;
-       }
-       .score {
-           font-size: 48px;
-           font-weight: bold;
-           color: #333;
-       }
-       .score-label {
-           font-size: 18px;
-           color: #666;
-       }
-       .weekly-change {
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           margin-top: 55px;
-       }
-       .change-label {
-           display: flex;
-           align-items: center;
-       }
-       .change-icon {
-           width: 5px;
-           border-radius: 5px;
-           height: 30px;
-           background-color: #f44336;
-           margin-right: 10px;
-       }
-       .change-value {
-           color: #333;
-           font-weight: bold;
-       }
-       .performance-chart {
-        flex: 1;
-        min-height: 300px;
-        margin-bottom: 20px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" href="../images/white_logo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: rgb(1, 3, 57);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            background-color: #47cbff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .logo span {
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .nav-tabs {
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+        .nav-tabs button {
+            background-color: transparent;
+            border: none;
+            color: #333;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .nav-tabs button.active {
+            background-color: rgb(1, 3, 57);
+            color: white;
+        }
+        .header-buttons {
+            display: flex;
+        }
+        .header-buttons button {
+            background-color: rgb(1, 3, 57);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 140px);
+        }
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .left-column {
+            flex: 0 0 35%;
+        }
+        .right-column {
+            flex: 1;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .top-performers {
+            flex: 1;
+            min-height: 300px;
+        }
+        .employees-table {
+            flex: 2;
+            min-height: 300px;
+        }
+        .company-score {
+            flex: 1;
+            min-height: 200px;
+        }
+        .performance-insights {
+            flex: 1;
+            min-height: 600px;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .score-container {
+            position: relative;
+            width: 200px;
+            margin: 0 auto;
+        }
+        .score-content {
+            position: absolute;
+            margin-top: 10px;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+        }
+        .score-label {
+            font-size: 18px;
+            color: #666;
+        }
+        .weekly-change {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .change-label {
+            display: flex;
+            align-items: center;
+        }
+        .change-icon {
+            width: 5px;
+            border-radius: 5px;
+            height: 30px;
+            background-color: #f44336;
+            margin-right: 10px;
+        }
+        .change-value {
+            color: #333;
+            font-weight: bold;
+        }
+        .performance-chart {
+            flex: 1;
+            min-height: 300px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
         }
         .chart-container {
             width: 100%;
-            height: 300px;
+            height: 100%;
         }
         .axis {
-            stroke: #888;
+            stroke: #dee2e6;
             stroke-width: 1;
         }
         .axis-label {
-            fill: #888;
+            fill: #6c757d;
             font-size: 12px;
         }
         .data-line {
@@ -188,322 +201,500 @@
         .line2 {
             stroke: #e24a8d;
         }
-       .insights table {
-           width: 100%;
-           border-collapse: collapse;
-       }
-       .insights th, .insights td {
-           text-align: left;
-           padding: 10px;
-           border-bottom: 1px solid #f0f0f0;
-       }
-       .insights th {
-           color: #888;
-           font-weight: normal;
-       }
-       .green-bar, .yellow-bar, .golden-bar, .silver-bar, .bronze-bar {
-           display: inline-block;
-           border-radius: 5px;
-           width: 5px;
-           height: 30px;
-           margin-right: 10px;
-           vertical-align: middle;
-       }
-       .green-bar {
-           background-color: #4caf50;
-       }
-       .yellow-bar {
-           background-color: #d8c515;
-       }
-       .golden-bar {
-           background-color: gold;
-       }
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .insights table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .insights th, .insights td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .insights th {
+            color: #888;
+            font-weight: normal;
+        }
+        .green-bar, .yellow-bar, .golden-bar, .silver-bar, .bronze-bar {
+            display: inline-block;
+            border-radius: 5px;
+            width: 5px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .green-bar {
+            background-color: #4caf50;
+        }
+        .yellow-bar {
+            background-color: #d8c515;
+        }
+        .golden-bar {
+            background-color: gold;
+        }
+        .silver-bar {
+            background-color: silver;
+        }
+        .bronze-bar {
+            background-color: #CD7F32;
+        }
+        .change-up {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .change-down {
+            color: #d8c515;
+            font-weight: bold;
+        }
+        .performer {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+        }
+        .performer:last-child {
+            border-bottom: none;
+        }
+        .performer img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .performer-name {
+            flex-grow: 1;
+            color: #333;
+        }
+        .performer-xp {
+            font-weight: bold;
+            color: #333;
+        }
+        .more-performers {
+            background-color: rgb(1, 3, 57);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto;
+        }
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(1, 3, 57);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
 
-       .silver-bar {
-           background-color: silver;
-       }
-       .bronze-bar {
-           background-color: #CD7F32;
-       }
-       .change-up {
-           color: #4caf50;
-           font-weight: bold;
-       }
-       .change-down {
-           color: #d8c515;
-           font-weight: bold;
-       }
-       .performer {
-           display: flex;
-           align-items: center;
-           margin-bottom: 10px;
-           border-bottom: 1px solid #f0f0f0;
-           padding: 10px 0;
-       }
-       .performer:last-child {
-           border-bottom: none;
-       }
-       .performer img {
-           width: 40px;
-           height: 40px;
-           border-radius: 50%;
-           margin-right: 10px;
-       }
-       .performer-name {
-           flex-grow: 1;
-           color: #333;
-       }
-       .performer-xp {
-           font-weight: bold;
-           color: #333;
-       }
-       .more-performers {
-           background-color: rgb(1, 3, 57);
-           color: white;
-           border: none;
-           padding: 10px;
-           width: 100%;
-           text-align: center;
-           cursor: pointer;
-           border-radius: 5px;
-           margin-top: auto;
-       }
-       .preloader {
-           position: fixed;
-           top: 0;
-           left: 0;
-           width: 100%;
-           height: 100%;
-           background-color: rgb(1, 3, 57);
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           z-index: 9999;
-           transition: opacity 0.5s ease-out;
-       }
-       .preloader.fade-out {
-           opacity: 0;
-       }
-       .spinner {
-           width: 50px;
-           height: 50px;
-           border: 5px solid #f3f3f3;
-           border-top: 5px solid #3498db;
-           border-radius: 50%;
-           animation: spin 1s linear infinite;
-       }
-       @keyframes spin {
-           0% { transform: rotate(0deg); }
-           100% { transform: rotate(360deg); }
-       }
-       .dashboard {
-           opacity: 0;
-           transition: opacity 0.5s ease-in;
-       }
-       .dashboard.fade-in {
-           opacity: 1;
-       }
-       .tab-content {
-           display: none;
-           width: 100%;
-       }
-       .tab-content.active {
-           display: flex;
-           gap: 20px;
-       }
-   </style>
+        .preloader.fade-out {
+            opacity: 0;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            perspective: 800px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: rotate 4s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(134, 25, 206, 0.8);
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cube-face img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            opacity: 0.8;
+        }
+
+        .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(50px); }
+        .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(50px); }
+        .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(50px); }
+        .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
+        .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+
+        @keyframes rotate {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: 20px;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+        }
+
+        .loading-text:after {
+            content: '...';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+        .dashboard {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        .dashboard.fade-in {
+            opacity: 1;
+        }
+        .tab-content {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .tab-content.active {
+            display: flex;
+            gap: 20px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Add a transition for the tab buttons */
+        .nav-tabs button {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .employee-tab-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .employee-overview {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+        }
+
+        .employee-activity {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+
+        .employees-table {
+            grid-column: 1 / -1;
+            grid-row: 2 / 3;
+        }
+        #employeeTable {
+            width: 100%;
+            min-width: 800px; /* Ensure table doesn't shrink too much on smaller screens */
+        }
+
+        #employeeTable th, #employeeTable td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        #employeeTable th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #employeeTable tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .rank {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rank.gold { background-color: gold; }
+        .rank.silver { background-color: silver; }
+        .rank.bronze { background-color: #cd7f32; }
+
+        .progress-bar {
+            width: 100px;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .progress-bar div {
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 5px;
+        }
+
+        .trend {
+            font-weight: bold;
+        }
+
+        .trend.up { color: #4caf50; }
+        .trend.down { color: #f44336; }
+        .trend.neutral { color: #ffa000; }
+
+        #viewAllEmployees {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #viewAllEmployees:hover {
+            background-color: #3a7bc8;
+        }
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+            .dashboard {
+                max-height: 1000px;
+            }
+            .left-column {
+                max-width: 450px;
+            }
+            .score-container {
+                max-width: 350px;
+                max-height: 350px;
+            }
+        }
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+            }
+            .dashboard {
+                max-height: 1200px;
+            }
+            .left-column {
+                max-width: 500px;
+            }
+            .score-container {
+                max-width: 400px;
+                max-height: 400px;
+            }
+        }
+        .employee-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+        .employee-overview {
+            min-height: 130px;
+        }
+        .employee-activity {
+            min-height: 130px;
+        }
+        .date-range-button {
+            background-color: rgb(1, 3, 57);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-   <div class="preloader">
-       <div class="spinner"></div>
-   </div>
+    <div class="preloader">
+        <div class="loader">
+            <div class="cube">
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+            </div>
+        </div>
+        <div class="loading-text">Loading</div>
+    </div>
 
-   <div class="container">
-       <header class="header">
-           <div class="logo">
-               <span class="logo-icon">U</span>
-               <span id="username"></span>
-           </div>
-           <nav class="nav-tabs">
-               <button class="active" data-tab="overview">Overview</button>
-               <button data-tab="employee">Employee</button>
-               <button data-tab="admin">Admin</button>
-           </nav>
-           <div class="header-buttons">
-               <button>Company</button>
-               <button>9/2 - 9/6</button>
-           </div>
-       </header>
 
-       <div class="dashboard">
-           <div class="tab-content active" id="overview">
-               <div class="left-column">
-                   <div class="card company-score">
-                       <h2>Company Score</h2>
-                       <div class="score-container" style="margin-top: 40px;">
-                        <svg width="200" height="120" viewBox="0 0 200 100">
-                            <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#e0e0e0" stroke-width="20"/>
-                            <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#4caf50" stroke-width="20" stroke-dasharray="283 283" stroke-dashoffset="39.62"/>
-                        </svg>
-                        <div class="score-content">
-                            <div class="score">86</div>
-                            <div class="score-label">Very Good</div>
-                        </div>
-                    </div>
-                    <div class="weekly-change">
-                        <div class="change-label">
-                            <div class="change-icon"></div>
-                            Weekly Change
-                        </div>
-                        <div class="change-value">↓ 2 points</div>
-                    </div>
-                   </div>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">U</span>
+                <span id="username"></span>
+            </div>
+            <nav class="nav-tabs">
+                <button class="active" data-tab="overview">Overview</button>
+                <button data-tab="employee">Employee</button>
+                <button data-tab="admin">Admin</button>
+            </nav>
+            <div class="header-buttons">
+                <button>Company</button>
+                <button id="dateRangeButton" class="date-range-button"></button>
+            </div>
+        </header>
 
-                   <div class="card top-performers">
-                       <h2>Top Performers</h2>
-                       <div class="performer">
-                           <span class="golden-bar"></span>
-                           <img src="../images/RC-Profile-Square.jpg" alt="Paul Graham">
-                           <span class="performer-name">Paul Graham</span>
-                           <span class="performer-xp">81,660 xp</span>
-                       </div>
-                       <div class="performer">
-                            <span class="silver-bar"></span>
-                           <img src="../images/Bechtel_Profile_Square.jpg" alt="Sam Altman">
-                           <span class="performer-name">Sam Altman</span>
-                           <span class="performer-xp">78,445 xp</span>
-                       </div>
-                       <div class="performer">
-                            <span class="bronze-bar"></span>
-                           <img src="../images/images-2.jpeg" alt="Gary Tan">
-                           <span class="performer-name">Gary Tan</span>
-                           <span class="performer-xp">71,800 xp</span>
-                       </div>
-                       <button class="more-performers">More Performers...</button>
-                   </div>
-               </div>
-
-               <div class="right-column">
-                   <div class="card performance-insights">
-                       <h2>Performance</h2>
-                       <div class="performance-chart">
-                        <div class="chart-container">
-                            <svg width="100%" height="100%" viewBox="0 0 600 300">
-                                <!-- X and Y axes -->
-                                <line class="axis" x1="50" y1="250" x2="550" y2="250" />
-                                <line class="axis" x1="50" y1="250" x2="50" y2="50" />
-                                
-                                <!-- X-axis labels -->
-                                <text class="axis-label" x="50" y="270" text-anchor="middle">8/2</text>
-                                <text class="axis-label" x="200" y="270" text-anchor="middle">8/9</text>
-                                <text class="axis-label" x="350" y="270" text-anchor="middle">8/16</text>
-                                <text class="axis-label" x="500" y="270" text-anchor="middle">8/23</text>
-                                
-                                <!-- Y-axis labels -->
-                                <text class="axis-label" x="40" y="250" text-anchor="end">0</text>
-                                <text class="axis-label" x="40" y="190" text-anchor="end">500K</text>
-                                <text class="axis-label" x="40" y="130" text-anchor="end">1M</text>
-                                <text class="axis-label" x="40" y="70" text-anchor="end">1.5M</text>
-                                
-                                <!-- Data lines -->
-                                <path class="data-line line1" d="M50,200 L200,150 L350,180 L500,100" />
-                                <path class="data-line line2" d="M50,180 L200,220 L350,120 L500,170" />
-                                
-                                <!-- Data points -->
-                                <circle class="data-point line1" cx="50" cy="200" r="4" />
-                                <circle class="data-point line1" cx="200" cy="150" r="4" />
-                                <circle class="data-point line1" cx="350" cy="180" r="4" />
-                                <circle class="data-point line1" cx="500" cy="100" r="4" />
-                                
-                                <circle class="data-point line2" cx="50" cy="180" r="4" />
-                                <circle class="data-point line2" cx="200" cy="220" r="4" />
-                                <circle class="data-point line2" cx="350" cy="120" r="4" />
-                                <circle class="data-point line2" cx="500" cy="170" r="4" />
-                            </svg>
-                        </div>
-                    </div>
-                       <h2>Insights</h2>
-                       <div class="insights">
-                           <table>
-                               <tr>
-                                   <th></th>
-                                   <th>This Week</th>
-                                   <th>Last Week</th>
-                                   <th>Change</th>
-                               </tr>
-                               <tr>
-                                   <td><span class="green-bar"></span>Total Sales</td>
-                                   <td>$7,680</td>
-                                   <td>$5,771</td>
-                                   <td class="change-up">↑ 13.1%</td>
-                               </tr>
-                               <tr>
-                                   <td><span class="green-bar"></span>Total XP</td>
-                                   <td>96,425</td>
-                                   <td>100</td>
-                                   <td class="change-up">↑ 21.0%</td>
-                               </tr>
-                               <tr>
-                                   <td><span class="yellow-bar"></span>Employee Growth</td>
-                                   <td>0.1%</td>
-                                   <td>0.3%</td>
-                                   <td class="change-down">↓ 66.6%</td>
-                               </tr>
-                           </table>
-                       </div>
-                   </div>
-               </div>
-           </div>
-
-           <div class="tab-content" id="employee">
+        <div class="dashboard">
+            <div class="tab-content active" id="overview">
                 <div class="left-column">
                     <div class="card company-score">
-                        <h2>Employee Score</h2>
-                        <div class="score-container">
-                            <div class="score-circle">
-                                <div class="score-fill"></div>
-                                <div class="score">37</div>
-                            </div>
-                            <div class="score-info">
+                        <h2>Company Score</h2>
+                        <div class="score-container" style="margin-top: 30px;">
+                            <svg width="200" height="120" viewBox="0 0 200 100">
+                                <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#e0e0e0" stroke-width="20"/>
+                                <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#4caf50" stroke-width="20" stroke-dasharray="283 283" stroke-dashoffset="39.62"/>
+                            </svg>
+                            <div class="score-content">
+                                <div class="score">86</div>
                                 <div class="score-label">Very Good</div>
-                                <div class="weekly-change">
-                                    <span class="change-icon">↓</span>
-                                    <span>2.3%</span>
-                                </div>
                             </div>
                         </div>
+                        <div class="weekly-change">
+                            <div class="change-label" style="margin-top: 10px;">
+                                <div class="change-icon"></div>
+                                Weekly Change
+                            </div>
+                            <div class="change-value" style="margin-top: 10px;">↓ 2 points</div>
+                        </div>
                     </div>
- 
+
                     <div class="card top-performers">
-                        <h2>Employees</h2>
+                        <h2>Top Performers</h2>
                         <div class="performer">
-                            <img src="/api/placeholder/40/40" alt="Paul Graham">
-                            <span class="performer-name">Paul Graham</span>
+                            <span class="golden-bar"></span>
+                            <img src="../images/RC-Profile-Square.jpg" alt="Matty Temple">
+                            <span class="performer-name">Matty Temple</span>
                             <span class="performer-xp">81,660 xp</span>
                         </div>
                         <div class="performer">
-                            <img src="/api/placeholder/40/40" alt="Sam Altman">
-                            <span class="performer-name">Sam Altman</span>
+                            <span class="silver-bar"></span>
+                            <img src="../images/images-2.jpeg" alt="Bryan Sonnie">
+                            <span class="performer-name">Bryan Sonnie</span>
                             <span class="performer-xp">78,445 xp</span>
                         </div>
                         <div class="performer">
-                            <img src="/api/placeholder/40/40" alt="Gary Tan">
-                            <span class="performer-name">Gary Tan</span>
+                            <span class="bronze-bar"></span>
+                            <img src="../images/Bechtel_Profile_Square.jpg" alt="Lovel Thorburn">
+                            <span class="performer-name">Lovel Thorburn</span>
                             <span class="performer-xp">71,800 xp</span>
                         </div>
-                        <div class="performer">
-                            <img src="/api/placeholder/40/40" alt="Gary Tan">
-                            <span class="performer-name">Dalton Caldwell</span>
-                            <span class="performer-xp">71,800 xp</span>
-                        </div>
-                        <button class="more-performers">More Performers...</button>
+                        <button id="morePerformersBtn" class="more-performers">More Performers...</button>
                     </div>
                 </div>
- 
+
                 <div class="right-column">
                     <div class="card performance-insights">
                         <h2>Performance</h2>
-                        <div class="performance-chart"></div>
+                        <div class="performance-chart">
+                            <div class="chart-container">
+                                <svg width="100%" height="100%" viewBox="0 0 600 300">
+                                    <!-- X and Y axes -->
+                                    <line class="axis" x1="50" y1="250" x2="550" y2="250" />
+                                    <line class="axis" x1="50" y1="250" x2="50" y2="50" />
+                                    
+                                    <!-- X-axis labels -->
+                                    <text class="axis-label" x="50"  y="<text class="axis-label" x="50" y="270" text-anchor="middle">8/2</text>
+                                    <text class="axis-label" x="200" y="270" text-anchor="middle">8/9</text>
+                                    <text class="axis-label" x="350" y="270" text-anchor="middle">8/16</text>
+                                    <text class="axis-label" x="500" y="270" text-anchor="middle">8/23</text>
+                                    
+                                    <!-- Y-axis labels -->
+                                    <text class="axis-label" x="40" y="250" text-anchor="end">0</text>
+                                    <text class="axis-label" x="40" y="190" text-anchor="end">500K</text>
+                                    <text class="axis-label" x="40" y="130" text-anchor="end">1M</text>
+                                    <text class="axis-label" x="40" y="70" text-anchor="end">1.5M</text>
+                                    
+                                    <!-- Data lines -->
+                                    <path class="data-line line1" d="M50,200 L200,150 L350,180 L500,100" />
+                                    <path class="data-line line2" d="M50,180 L200,220 L350,120 L500,170" />
+                                    
+                                    <!-- Data points -->
+                                    <circle class="data-point line1" cx="50" cy="200" r="4" />
+                                    <circle class="data-point line1" cx="200" cy="150" r="4" />
+                                    <circle class="data-point line1" cx="350" cy="180" r="4" />
+                                    <circle class="data-point line1" cx="500" cy="100" r="4" />
+                                    
+                                    <circle class="data-point line2" cx="50" cy="180" r="4" />
+                                    <circle class="data-point line2" cx="200" cy="220" r="4" />
+                                    <circle class="data-point line2" cx="350" cy="120" r="4" />
+                                    <circle class="data-point line2" cx="500" cy="170" r="4" />
+                                </svg>
+                            </div>
+                        </div>
                         <h2>Insights</h2>
                         <div class="insights">
                             <table>
@@ -514,13 +705,13 @@
                                     <th>Change</th>
                                 </tr>
                                 <tr>
-                                    <td><span class="green-bar"></span>Total Tasks</td>
+                                    <td><span class="green-bar"></span>Total Sales</td>
                                     <td>$7,680</td>
                                     <td>$5,771</td>
                                     <td class="change-up">↑ 13.1%</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="green-bar"></span>Avg Task Value</td>
+                                    <td><span class="green-bar"></span>Total XP</td>
                                     <td>96,425</td>
                                     <td>100</td>
                                     <td class="change-up">↑ 21.0%</td>
@@ -533,53 +724,220 @@
                                 </tr>
                             </table>
                         </div>
+                    </div>
                 </div>
             </div>
-           </div>
 
-           <div class="tab-content" id="admin">
-               <div class="card" style="width: 100%;">
-                   <h2>Admin Tab Content</h2>
-                   <p>This is where admin-specific content would go.</p>
-               </div>
-           </div>
-       </div>
-   </div>
+            <div class="tab-content" id="employee">
+                <div class="employee-tab-content">
+                    <div class="card employee-overview">
+                        <h2>Employee Overview</h2>
+                        <div class="employee-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">152</div>
+                                <div class="stat-label">Total Employees</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">87%</div>
+                                <div class="stat-label">Engagement Rate</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" style="color: #4caf50;">15%</div>
+                                <div class="stat-label">Company Rate of XP Change</div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="card employee-activity">
+                        <h2>Recent Activity</h2>
+                        <ul class="activity-list">
+                            <li>Matty Temple completed the "Advanced Leadership" course 2 hours ago</li>
+                            <li>Bryan Sonnie reached 75,000 XP milestone 1 day ago</li>
+                            <li>Sarah Johnson started "Project Management Basics" 3 days ago</li>
+                        </ul>
+                    </div>
+        
+                    <div class="card employees-table">
+                        <h2>Employees</h2>
+                        <table id="employeeTable">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>XP</th>
+                                    <th>Engagement</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeData">
+                                <tr>
+                                    <td><span class="rank gold">1</span></td>
+                                    <td>
+                                        <img src="../images/avatar1.jpg" alt="Matty Temple" class="avatar">
+                                        Matty Temple
+                                    </td>
+                                    <td>81,660</td>
+                                    <td><div class="progress-bar"><div style="width:98%"></div></div> 98%</td>
+                                    <td><span class="trend up">↑ 2%</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="rank silver">2</span></td>
+                                    <td>
+                                        <img src="../images/avatar2.jpg" alt="Bryan Sonnie" class="avatar">
+                                        Bryan Sonnie
+                                    </td>
+                                    <td>78,445</td>
+                                    <td><div class="progress-bar"><div style="width:95%"></div></div> 95%</td>
+                                    <td><span class="trend up">↑ 1%</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="rank bronze">3</span></td>
+                                    <td>
+                                        <img src="../images/avatar3.jpg" alt="Lovel Thorburn" class="avatar">
+                                        Lovel Thorburn
+                                    </td>
+                                    <td>71,800</td>
+                                    <td><div class="progress-bar"><div style="width:93%"></div></div> 93%</td>
+                                    <td><span class="trend down">↓ 1%</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="rank">4</span></td>
+                                    <td>
+                                        <img src="../images/avatar4.jpg" alt="Sarah Johnson" class="avatar">
+                                        Sarah Johnson
+                                    </td>
+                                    <td>68,920</td>
+                                    <td><div class="progress-bar"><div style="width:91%"></div></div> 91%</td>
+                                    <td><span class="trend up">↑ 3%</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="rank">5</span></td>
+                                    <td>
+                                        <img src="../images/avatar5.jpg" alt="Mike Chen" class="avatar">
+                                        Mike Chen
+                                    </td>
+                                    <td>65,500</td>
+                                    <td><div class="progress-bar"><div style="width:89%"></div></div> 89%</td>
+                                    <td><span class="trend neutral">-</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="viewAllEmployees" class="btn-primary">View All Employees</button>
+                    </div>
+                </div>
+            </div>
 
-   <script>
-       // Preloader script
-       window.addEventListener('load', function() {
-           setTimeout(function() {
-               document.querySelector('.preloader').classList.add('fade-out');
-               document.querySelector('.dashboard').classList.add('fade-in');
-               setTimeout(function() {
-                   document.querySelector('.preloader').style.display = 'none';
-               }, 500);
-           }, 2000); // Simulating loading time
-       });
+            <div class="tab-content" id="admin">
+                <div class="card" style="width: 100%;">
+                    <h2>Admin Tab Content</h2>
+                    <p>This is where admin-specific content would go.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-       // Tab switching functionality
-       document.querySelectorAll('.nav-tabs button').forEach(button => {
-           button.addEventListener('click', () => {
-               // Remove active class from all buttons and tab contents
-               document.querySelectorAll('.nav-tabs button').forEach(btn => btn.classList.remove('active'));
-               document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.799.0/aws-sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // AWS Configuration
+        AWS.config.region = 'your-region';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'your-identity-pool-id',
+        });
 
-               // Add active class to clicked button and corresponding tab content
-               button.classList.add('active');
-               document.getElementById(button.getAttribute('data-tab')).classList.add('active');
-           });
-       });
-   </script>
-       <script>
+        // Function to call AWS Lambda
+        async function callLambda(functionName, payload) {
+            const lambda = new AWS.Lambda();
+            const params = {
+                FunctionName: functionName,
+                Payload: JSON.stringify(payload)
+            };
+
+            try {
+                const data = await lambda.invoke(params).promise();
+                return JSON.parse(data.Payload);
+            } catch (error) {
+                console.error(`Error calling Lambda function ${functionName}:`, error);
+                throw error;
+            }
+        }
+
+        async function fetchEmployeeData() {
+            try {
+                const data = await callLambda('getEmployeeData', {});
+                
+                // Populate the table
+                const tableBody = document.getElementById('employeeData');
+                tableBody.innerHTML = ''; // Clear existing data
+                data.forEach(employee => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = employee.name;
+                    row.insertCell(1).textContent = employee.xp;
+                    row.insertCell(2).textContent = employee.engagement;
+                });
+            } catch (error) {
+                console.error('Error fetching employee data:', error);
+                // Display error message to the user
+                const tableBody = document.getElementById('employeeData');
+                const errorRow = tableBody.insertRow();
+                const errorCell = errorRow.insertCell();
+                errorCell.colSpan = 3;
+                errorCell.className = 'error-message';
+                errorCell.textContent = 'Error loading employee data. Please try again later.';
+            }
+        }
+
+        // Tab switching functionality
+        document.querySelectorAll('.nav-tabs button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tabs button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(button.getAttribute('data-tab')).classList.add('active');
+
+                // Fetch employee data when switching to the employee tab
+                if (button.getAttribute('data-tab') === 'employee') {
+                    fetchEmployeeData();
+                }
+            });
+        });
+
+        window.addEventListener('load', async () => {
+            // Simulate loading time (you can adjust this or remove it if you're loading real data)
+            setTimeout(() => {
+                document.querySelector('.preloader').classList.add('fade-out');
+                document.querySelector('.dashboard').classList.add('fade-in');
+                setTimeout(() => {
+                    document.querySelector('.preloader').style.display = 'none';
+                }, 500);
+            }, 2000); // Increased to 3 seconds to show off the animation, adjust as needed
+            if (document.querySelector('.nav-tabs button.active').getAttribute('data-tab') === 'employee') {
+                await fetchEmployeeData();
+            }
+        });
+
+        // Parse JWT token and display username
         document.addEventListener("DOMContentLoaded", function() {
+            const dateRangeButton = document.getElementById('dateRangeButton');
+            dateRangeButton.textContent = getCurrentWeekDateRange();
+            const morePerformersBtn = document.getElementById('morePerformersBtn');
+            if (morePerformersBtn) {
+                morePerformersBtn.addEventListener('click', showMorePerformers);
+            }
+
+            // Update the existing tab switching functionality
+            document.querySelectorAll('.nav-tabs button').forEach(button => {
+                button.addEventListener('click', () => {
+                    switchTab(button.getAttribute('data-tab'));
+                });
+            });
             const token = localStorage.getItem('idToken');
             if (token) {
                 const decodedToken = parseJwt(token);
-                const username = decodedToken['cognito:username']; // Adjust this based on your token claims
+                const username = decodedToken['cognito:username'];
                 document.getElementById('username').textContent = username;
             } else {
-                window.location.href = 'login.html';  // Redirect to login if no token is found
+                window.location.href = '../login.html';
             }
         });
 
@@ -590,6 +948,83 @@
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
             return JSON.parse(jsonPayload);
+        }
+        function switchTab(tabId) {
+            const allTabs = document.querySelectorAll('.tab-content');
+            const allButtons = document.querySelectorAll('.nav-tabs button');
+            
+            // First, start the fade-out for all tabs
+            allTabs.forEach(tab => {
+                tab.style.opacity = '0';
+                tab.style.transform = 'translateY(20px)';
+            });
+
+            // Remove active class from all buttons
+            allButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Add active class to the clicked button
+            const targetButton = document.querySelector(`.nav-tabs button[data-tab="${tabId}"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+
+            // After a short delay, update the active tab and start the fade-in
+            setTimeout(() => {
+                allTabs.forEach(tab => tab.classList.remove('active'));
+                const targetTab = document.getElementById(tabId);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                    // Trigger reflow to ensure the transition applies
+                    void targetTab.offsetWidth;
+                    targetTab.style.opacity = '1';
+                    targetTab.style.transform = 'translateY(0)';
+                }
+
+                if (tabId === 'employee') {
+                    fetchEmployeeData();
+                    createEmployeeBreakdownChart();
+                }
+            }, 300); // This delay should match the transition duration
+        }
+        function showMorePerformers() {
+            switchTab('employee');
+        }
+        function createEmployeeBreakdownChart() {
+            const ctx = document.getElementById('employeeBreakdowns').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Junior', 'Mid-level', 'Senior', 'Management'],
+                    datasets: [{
+                        data: [30, 45, 20, 5],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Employee Level Distribution'
+                    }
+                }
+            });
+        }
+        function getCurrentWeekDateRange() {
+            const today = new Date();
+            const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+            const diff = today.getDate() - currentDay + (currentDay === 0 ? -6 : 1); // Adjust when day is Sunday
+            
+            const monday = new Date(today.setDate(diff));
+            const friday = new Date(today.setDate(diff + 4));
+            
+            const formatDate = (date) => {
+                const month = date.getMonth() + 1; // getMonth() returns 0-11
+                const day = date.getDate();
+                return `${month}/${day}`;
+            };
+            
+            return `${formatDate(monday)} - ${formatDate(friday)}`;
         }
     </script>
 </body>

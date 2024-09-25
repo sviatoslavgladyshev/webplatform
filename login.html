@@ -6,11 +6,13 @@
     <title>Login with Cognito</title>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1231.0.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -18,104 +20,114 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e0e0e0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
         }
 
         .login-container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 360px;
+            max-width: 400px;
             text-align: center;
         }
 
         h1 {
             margin-bottom: 1.5rem;
-            color: #007bff;
+            color: #4a4a4a;
+            font-weight: 600;
+            font-size: 2rem;
         }
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            text-align: left;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-group {
+            position: relative;
         }
 
         input {
             width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: 0.3s ease all;
         }
 
         input:focus {
-            border-color: #007bff;
             outline: none;
+            border-color: #667eea;
+        }
+
+        label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #666;
+            transition: 0.3s ease all;
+            pointer-events: none;
+            background-color: white;
+            padding: 0 0.25rem;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            top: -0.5rem;
+            left: 0.5rem;
+            font-size: 0.8rem;
+            color: #667eea;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            text-align: left;
+            display: none;
         }
 
         button {
-            position: relative;
             width: 100%;
-            padding: 0.75rem;
-            background-color: #007bff;
+            padding: 1rem;
+            background: #667eea;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            overflow: hidden;
+            transition: 0.3s ease all;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background: #5a6fe0;
         }
 
-        button:disabled {
-            background-color: #007bff;
-            cursor: not-allowed;
+        .forgot-password {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s ease all;
         }
 
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #ffffff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        .forgot-password:hover {
+            color: #5a6fe0;
+        }
+
+        #loginForm, #resetForm, #newPasswordForm {
             display: none;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            display: none;
-            margin-left: 0.5rem;
-        }
-
-        button.loading .spinner {
-            display: inline;
-        }
-
-        button.loading .loading-text {
-            display: inline;
-        }
-
-        button.loading .default-text {
-            display: none;
+        .active {
+            display: block !important;
         }
     </style>
     <script>
@@ -128,16 +140,7 @@
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const button = document.getElementById('loginButton');
-            const spinner = document.getElementById('spinner');
-            const loadingText = document.getElementById('loadingText');
-            const defaultText = document.getElementById('defaultText');
-
-            button.disabled = true;
-            button.classList.add('loading');
-            spinner.style.display = 'inline-block';
-            loadingText.style.display = 'inline';
-            defaultText.style.display = 'none';
+            clearErrors();
 
             try {
                 const authParams = {
@@ -151,35 +154,113 @@
 
                 const loginResult = await cognito.initiateAuth(authParams).promise();
                 const idToken = loginResult.AuthenticationResult.IdToken;
-                localStorage.setItem('idToken', idToken);  // Store the ID token
-                window.location.href = 'home/';  // Redirect to the dashboard page
+                localStorage.setItem('idToken', idToken);
+                window.location.href = 'home/';
             } catch (error) {
-                alert('Login failed: ' + error.message);
-            } finally {
-                button.disabled = false;
-                button.classList.remove('loading');
-                spinner.style.display = 'none';
-                loadingText.style.display = 'none';
-                defaultText.style.display = 'inline';
+                showError('loginError', error.message);
             }
         }
+
+        async function forgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            clearErrors();
+
+            try {
+                const params = {
+                    ClientId: clientId,
+                    Username: email
+                };
+
+                await cognito.forgotPassword(params).promise();
+                showForm('newPasswordForm');
+            } catch (error) {
+                showError('resetError', error.message);
+            }
+        }
+
+        async function resetPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            const code = document.getElementById('verificationCode').value;
+            const newPassword = document.getElementById('newPassword').value;
+            clearErrors();
+
+            try {
+                const params = {
+                    ClientId: clientId,
+                    Username: email,
+                    ConfirmationCode: code,
+                    Password: newPassword
+                };
+
+                await cognito.confirmForgotPassword(params).promise();
+                showError('newPasswordError', 'Password reset successful. You can now log in with your new password.');
+                setTimeout(() => showForm('loginForm'), 3000);
+            } catch (error) {
+                showError('newPasswordError', error.message);
+            }
+        }
+
+        function showForm(formId) {
+            document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showForm('loginForm');
+        });
     </script>
 </head>
 <body>
     <div class="login-container">
-        <h1>Login</h1>
-        <form onsubmit="login(event)">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+        <h1>Welcome Back</h1>
+        
+        <form id="loginForm" onsubmit="login(event)">
+            <div class="input-group">
+                <input type="email" id="email" name="email" required placeholder=" ">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" required placeholder=" ">
+                <label for="password">Password</label>
+            </div>
+            <div id="loginError" class="error-message"></div>
+            <button type="submit">Log In</button>
+            <a href="#" class="forgot-password" onclick="showForm('resetForm')">Forgot Password?</a>
+        </form>
+        
+        <form id="resetForm" onsubmit="forgotPassword(event)">
+            <div class="input-group">
+                <input type="email" id="resetEmail" name="resetEmail" required placeholder=" ">
+                <label for="resetEmail">Email</label>
+            </div>
+            <div id="resetError" class="error-message"></div>
+            <button type="submit">Send Reset Code</button>
+            <a href="#" class="forgot-password" onclick="showForm('loginForm')">Back to Login</a>
+        </form>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <button id="loginButton" type="submit">
-                <span id="spinner" class="spinner"></span>
-                <span id="loadingText" class="loading-text">Loading...</span>
-                <span id="defaultText" class="default-text">Log In</span>
-            </button>
+        <form id="newPasswordForm" onsubmit="resetPassword(event)">
+            <div class="input-group">
+                <input type="text" id="verificationCode" name="verificationCode" required placeholder=" ">
+                <label for="verificationCode">Verification Code</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="newPassword" name="newPassword" required placeholder=" ">
+                <label for="newPassword">New Password</label>
+            </div>
+            <div id="newPasswordError" class="error-message"></div>
+            <button type="submit">Reset Password</button>
         </form>
     </div>
 </body>

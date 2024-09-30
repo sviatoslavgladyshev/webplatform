@@ -1,242 +1,1222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Existing head content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Management System</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Dashboard</title>
+    <link rel="icon" href="../images/white_logo.png">
     <style>
+        /* CSS styles */
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: rgb(1, 3, 57);
+            color: #333;
         }
         .container {
             max-width: 1200px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
         }
-        #drop_zone {
-            border: 2px dashed #ccc;
-            border-radius: 20px;
-            width: 100%;
-            margin: 20px 0;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            background-color: #47cbff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .logo span {
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .nav-tabs {
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+        .nav-tabs button {
+            background-color: transparent;
+            border: none;
+            color: #333;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .nav-tabs button.active {
+            background-color: rgb(1, 3, 57);
+            color: white;
+        }
+        .header-buttons {
+            display: flex;
+        }
+        .header-buttons button {
+            background-color: rgb(1, 3, 57);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 140px);
+        }
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .left-column {
+            flex: 0 0 35%;
+        }
+        .right-column {
+            flex: 1;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
             padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .top-performers {
+            flex: 1;
+            min-height: 300px;
+        }
+        .employees-table {
+            flex: 2;
+            min-height: 300px;
+        }
+        .company-score {
+            flex: 1;
+            min-height: 200px;
+        }
+        .performance-insights {
+            flex: 1;
+            min-height: 600px;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .score-container {
+            position: relative;
+            width: 200px;
+            margin: 0 auto;
+        }
+        .score-content {
+            position: absolute;
+            margin-top: 10px;
+            bottom: 0;
+            width: 100%;
             text-align: center;
         }
-        #drop_zone.dragover {
-            background-color: #e9e9e9;
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .score-label {
+            font-size: 18px;
+            color: #666;
+        }
+        .weekly-change {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .change-label {
+            display: flex;
+            align-items: center;
+        }
+        .change-icon {
+            width: 5px;
+            border-radius: 5px;
+            height: 30px;
+            background-color: #f44336;
             margin-right: 10px;
-            margin-bottom: 10px;
         }
-        button:hover {
-            background-color: #45a049;
+        .change-value {
+            color: #333;
+            font-weight: bold;
         }
-        #lead_list {
-            margin-top: 20px;
-            overflow-x: auto;
+        .performance-chart {
+            flex: 1;
+            min-height: 300px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
         }
-        table {
+        .chart-container {
+            width: 100%;
+            height: 100%;
+        }
+        .axis {
+            stroke: #dee2e6;
+            stroke-width: 1;
+        }
+        .axis-label {
+            fill: #6c757d;
+            font-size: 12px;
+        }
+        .data-line {
+            fill: none;
+            stroke-width: 2;
+        }
+        .data-point {
+            fill: #fff;
+            stroke-width: 2;
+        }
+        .line1 {
+            stroke: #4a90e2;
+        }
+        .line2 {
+            stroke: #e24a8d;
+        }
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .insights table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        .insights th, .insights td {
             text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        select {
-            width: 100%;
-            padding: 5px;
-        }
-        #status {
-            margin-top: 20px;
             padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .insights th {
+            color: #888;
+            font-weight: normal;
+        }
+        .green-bar, .yellow-bar, .golden-bar, .silver-bar, .bronze-bar {
+            display: inline-block;
+            border-radius: 5px;
+            width: 5px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .green-bar {
+            background-color: #4caf50;
+        }
+        .yellow-bar {
+            background-color: #d8c515;
+        }
+        .golden-bar {
+            background-color: gold;
+        }
+        .silver-bar {
+            background-color: silver;
+        }
+        .bronze-bar {
+            background-color: #CD7F32;
+        }
+        .change-up {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .change-down {
+            color: #d8c515;
+            font-weight: bold;
+        }
+        .performer {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+        }
+        .performer:last-child {
+            border-bottom: none;
+        }
+        .performer img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .performer-name {
+            flex-grow: 1;
+            color: #333;
+        }
+        .performer-xp {
+            font-weight: bold;
+            color: #333;
+        }
+        .more-performers {
+            background-color: rgb(1, 3, 57);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto;
+        }
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(1, 3, 57);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            perspective: 800px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: rotate 4s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(134, 25, 206, 0.8);
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cube-face img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            opacity: 0.8;
+        }
+
+        .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(50px); }
+        .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(50px); }
+        .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(50px); }
+        .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
+        .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+
+        @keyframes rotate {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: 20px;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+        }
+
+        .loading-text:after {
+            content: '...';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+        .dashboard {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        .dashboard.fade-in {
+            opacity: 1;
+        }
+        .tab-content {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .tab-content.active {
+            display: flex;
+            gap: 20px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Add a transition for the tab buttons */
+        .nav-tabs button {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .employee-tab-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .employee-overview {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+        }
+
+        .employee-activity {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+
+        .employees-table {
+            grid-column: 1 / -1;
+            grid-row: 2 / 3;
+        }
+        #employeeTable {
+            width: 100%;
+            min-width: 800px; /* Ensure table doesn't shrink too much on smaller screens */
+        }
+
+        #employeeTable th, #employeeTable td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        #employeeTable th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #employeeTable tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .rank {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rank.gold { background-color: gold; }
+        .rank.silver { background-color: silver; }
+        .rank.bronze { background-color: #cd7f32; }
+
+        .progress-bar {
+            width: 100px;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .progress-bar div {
+            height: 100%;
+            background-color: #4caf50;
             border-radius: 5px;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+
+        .trend {
+            font-weight: bold;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
+
+        .trend.up { color: #4caf50; }
+        .trend.down { color: #f44336; }
+        .trend.neutral { color: #ffa000; }
+
+        #viewAllEmployees {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
+
+        #viewAllEmployees:hover {
+            background-color: #3a7bc8;
+        }
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+            .dashboard {
+                max-height: 1000px;
+            }
+            .left-column {
+                max-width: 450px;
+            }
+            .score-container {
+                max-width: 350px;
+                max-height: 350px;
+            }
+        }
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+            }
+            .dashboard {
+                max-height: 1200px;
+            }
+            .left-column {
+                max-width: 500px;
+            }
+            .score-container {
+                max-width: 400px;
+                max-height: 400px;
+            }
+        }
+        .employee-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+        .employee-overview {
+            min-height: 130px;
+        }
+        .employee-activity {
+            min-height: 130px;
+        }
+        .date-range-button {
+            background-color: rgb(1, 3, 57);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Styles for the drag and drop area */
+        #dropArea {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            color: #ccc;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #dropArea.hover {
+            border-color: #333;
+            color: #333;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+
+        #processFilesButton {
+            background-color: rgb(1, 3, 57);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+
+        #processFilesButton:hover {
+            background-color: #333;
+        }
+
+        /* Styles for the progress bar */
+        #progressBarContainer {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #progressBar {
+            width: 0%;
+            height: 20px;
+            background-color: #4caf50;
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+        }
+
     </style>
+    <!-- Include SheetJS library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Lead Management System</h1>
-        <div id="drop_zone">
-            <p>Drag and drop an Excel file here, or click to select files</p>
-            <input type="file" id="fileInput" style="display: none;" accept=".xlsx, .xls">
+    <!-- Body content -->
+    <div class="preloader">
+        <!-- Preloader content -->
+        <div class="loader">
+            <div class="cube">
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+                <div class="cube-face"><img src="../images/white_logo.png" alt="Logo"></div>
+            </div>
         </div>
-        <button id="assignButton" style="display: none;">Assign Leads to Employees</button>
-        <button id="exportButton" style="display: none;">Export Assignments</button>
-        <button id="saveButton" style="display: none;">Save Assignments to Database</button>
-        <div id="lead_list"></div>
-        <div id="status"></div>
+        <div class="loading-text">Loading</div>
     </div>
 
+    <div class="container">
+        <header class="header">
+            <!-- Header content -->
+            <div class="logo">
+                <span class="logo-icon">U</span>
+                <span id="username"></span>
+            </div>
+            <nav class="nav-tabs">
+                <button class="active" data-tab="overview">Overview</button>
+                <button data-tab="employee">Employee</button>
+                <button data-tab="admin">Admin</button>
+            </nav>
+            <div class="header-buttons">
+                <button>Company</button>
+                <button id="dateRangeButton" class="date-range-button"></button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Overview Tab Content -->
+            <div class="tab-content active" id="overview">
+                <div class="left-column">
+                    <div class="card company-score">
+                        <h2>Company Score</h2>
+                        <div class="score-container" style="margin-top: 30px;">
+                            <svg width="200" height="120" viewBox="0 0 200 100">
+                                <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#e0e0e0" stroke-width="20"/>
+                                <path d="M10 90 A 90 90 0 0 1 190 90" fill="none" stroke="#4caf50" stroke-width="20" stroke-dasharray="283 283" stroke-dashoffset="39.62"/>
+                            </svg>
+                            <div class="score-content">
+                                <div class="score">86</div>
+                                <div class="score-label">Very Good</div>
+                            </div>
+                        </div>
+                        <div class="weekly-change">
+                            <div class="change-label" style="margin-top: 10px;">
+                                <div class="change-icon"></div>
+                                Weekly Change
+                            </div>
+                            <div class="change-value" style="margin-top: 10px;">↓ 2 points</div>
+                        </div>
+                    </div>
+
+                    <div class="card top-performers">
+                        <h2>Top Performers</h2>
+                        <div class="performer">
+                            <span class="golden-bar"></span>
+                            <img src="../images/RC-Profile-Square.jpg" alt="Matty Temple">
+                            <span class="performer-name">Matty Temple</span>
+                            <span class="performer-xp">81,660 xp</span>
+                        </div>
+                        <div class="performer">
+                            <span class="silver-bar"></span>
+                            <img src="../images/images-2.jpeg" alt="Bryan Sonnie">
+                            <span class="performer-name">Bryan Sonnie</span>
+                            <span class="performer-xp">78,445 xp</span>
+                        </div>
+                        <div class="performer">
+                            <span class="bronze-bar"></span>
+                            <img src="../images/Bechtel_Profile_Square.jpg" alt="Lovel Thorburn">
+                            <span class="performer-name">Lovel Thorburn</span>
+                            <span class="performer-xp">71,800 xp</span>
+                        </div>
+                        <button id="morePerformersBtn" class="more-performers">More Performers...</button>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="card performance-insights">
+                        <h2>Performance</h2>
+                        <div class="performance-chart">
+                            <div class="chart-container">
+                                <!-- Include your chart SVG or canvas here -->
+                                <!-- ... [your existing chart code] ... -->
+                            </div>
+                        </div>
+                        <h2>Insights</h2>
+                        <div class="insights">
+                            <table>
+                                <tr>
+                                    <th></th>
+                                    <th>This Week</th>
+                                    <th>Last Week</th>
+                                    <th>Change</th>
+                                </tr>
+                                <tr>
+                                    <td><span class="green-bar"></span>Total Sales</td>
+                                    <td>$7,680</td>
+                                    <td>$5,771</td>
+                                    <td class="change-up">↑ 13.1%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="green-bar"></span>Total XP</td>
+                                    <td>96,425</td>
+                                    <td>100</td>
+                                    <td class="change-up">↑ 21.0%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="yellow-bar"></span>Employee Growth</td>
+                                    <td>0.1%</td>
+                                    <td>0.3%</td>
+                                    <td class="change-down">↓ 66.6%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Tab Content -->
+            <div class="tab-content" id="employee">
+                <div class="employee-tab-content">
+                    <div class="card employee-overview">
+                        <h2>Employee Overview</h2>
+                        <div class="employee-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">152</div>
+                                <div class="stat-label">Total Employees</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">87%</div>
+                                <div class="stat-label">Engagement Rate</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" style="color: #4caf50;">15%</div>
+                                <div class="stat-label">Company Rate of XP Change</div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="card employee-activity">
+                        <h2>Recent Activity</h2>
+                        <ul class="activity-list">
+                            <li>Matty Temple completed the "Advanced Leadership" course 2 hours ago</li>
+                            <li>Bryan Sonnie reached 75,000 XP milestone 1 day ago</li>
+                            <li>Sarah Johnson started "Project Management Basics" 3 days ago</li>
+                        </ul>
+                    </div>
+        
+                    <div class="card employees-table">
+                        <h2>Employees</h2>
+                        <table id="employeeTable">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Name</th>
+                                    <th>XP</th>
+                                    <th>Engagement</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeData">
+                                <!-- Employee data will be populated here -->
+                                <!-- ... [your existing employee data rows] ... -->
+                            </tbody>
+                        </table>
+                        <button id="viewAllEmployees" class="btn-primary">View All Employees</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Tab Content -->
+            <div class="tab-content" id="admin">
+                <div class="card" style="width: 100%;">
+                    <h2>Upload Excel Files</h2>
+                    <div id="dropArea">
+                        <p>Drag and drop Excel files here or click to select files.</p>
+                <input type="file" id="fileInput" multiple style="display: none;" />
+                    </div>
+                    <div id="fileList"></div>
+                    <button id="processFilesButton">Process Files</button>
+                    <!-- Progress Bar -->
+                    <div id="progressBarContainer">
+                        <div id="progressBar">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AWS SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.799.0/aws-sdk.min.js"></script>
     <script>
-        let leads = [];
-        const dropZone = document.getElementById('drop_zone');
-        const fileInput = document.getElementById('fileInput');
-        const assignButton = document.getElementById('assignButton');
-        const exportButton = document.getElementById('exportButton');
-        const saveButton = document.getElementById('saveButton');
-        const leadList = document.getElementById('lead_list');
-        const status = document.getElementById('status');
+        // AWS Configuration
+        AWS.config.region = 'us-east-1'; // e.g., 'us-east-1'
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'us-east-1:1d1c60e7-e720-4baa-8cd6-3a17b2f0fdf0', // e.g., 'us-east-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        });
 
-        dropZone.ondragover = (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        };
-
-        dropZone.ondragleave = () => {
-            dropZone.classList.remove('dragover');
-        };
-
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            processFile(file);
-        };
-
-        dropZone.onclick = () => fileInput.click();
-
-        fileInput.onchange = (e) => {
-            const file = e.target.files[0];
-            processFile(file);
-        };
-
-        function processFile(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                leads = XLSX.utils.sheet_to_json(worksheet);
-                displayLeads();
-                assignButton.style.display = 'inline-block';
-                exportButton.style.display = 'inline-block';
+        // Function to call AWS Lambda
+        async function callLambda(functionName, payload) {
+            const lambda = new AWS.Lambda();
+            const params = {
+                FunctionName: functionName,
+                Payload: JSON.stringify(payload)
             };
-            reader.readAsArrayBuffer(file);
-        }
-
-        function displayLeads() {
-            leadList.innerHTML = '<h3>Imported Leads:</h3>';
-            const table = document.createElement('table');
-            const headerRow = table.insertRow();
-            const headers = ['Last', 'First', '#', 'St', 'Apt', 'City', 'State', 'Zip', '2 Gig with AP', 'Pass 1', 'Pass 2', 'Pass 3', 'Assigned To'];
-            headers.forEach(header => {
-                const th = document.createElement('th');
-                th.textContent = header;
-                headerRow.appendChild(th);
-            });
-
-            leads.forEach((lead, index) => {
-                const row = table.insertRow();
-                headers.forEach(header => {
-                    const cell = row.insertCell();
-                    if (header === 'Assigned To') {
-                        const select = document.createElement('select');
-                        select.innerHTML = `
-                            <option value="">Select Employee</option>
-                            <option value="Employee1">Employee 1</option>
-                            <option value="Employee2">Employee 2</option>
-                            <option value="Employee3">Employee 3</option>
-                        `;
-                        select.value = lead.assignedTo || '';
-                        select.onchange = (e) => {
-                            lead.assignedTo = e.target.value;
-                            saveButton.style.display = 'inline-block';
-                        };
-                        cell.appendChild(select);
-                    } else {
-                        cell.textContent = lead[header] || '';
-                    }
-                });
-            });
-
-            leadList.appendChild(table);
-        }
-
-        assignButton.onclick = () => {
-            leads.forEach(lead => {
-                if (!lead.assignedTo) {
-                    lead.assignedTo = getRandomEmployee();
-                }
-            });
-            displayLeads();
-            saveButton.style.display = 'inline-block';
-        };
-
-        exportButton.onclick = () => {
-            const workbook = XLSX.utils.book_new();
-            const worksheet = XLSX.utils.json_to_sheet(leads);
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Assigned Leads');
-            XLSX.writeFile(workbook, 'assigned_leads.xlsx');
-        };
-
-        saveButton.onclick = async () => {
-            const leadAssignments = leads.map(lead => ({
-                leadId: lead['#'],
-                employeeId: lead.assignedTo,
-                leadData: lead
-            }));
 
             try {
-                const response = await fetch('YOUR_API_GATEWAY_ENDPOINT', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(leadAssignments),
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    showStatus('Assignments saved successfully!', 'success');
-                } else {
-                    throw new Error(result.message || 'Failed to save assignments');
-                }
+                const data = await lambda.invoke(params).promise();
+                return JSON.parse(data.Payload);
             } catch (error) {
-                console.error('Error:', error);
-                showStatus('Failed to save assignments: ' + error.message, 'error');
+                console.error(`Error calling Lambda function ${functionName}:`, error);
+                throw error;
             }
-        };
-
-        function getRandomEmployee() {
-            const employees = ['Employee1', 'Employee2', 'Employee3'];
-            return employees[Math.floor(Math.random() * employees.length)];
         }
 
-        function showStatus(message, type) {
-            status.textContent = message;
-            status.className = type;
+        // Tab switching functionality
+        document.querySelectorAll('.nav-tabs button').forEach(button => {
+            button.addEventListener('click', () => {
+                switchTab(button.getAttribute('data-tab'));
+            });
+        });
+
+        window.addEventListener('load', async () => {
+            // Simulate loading time (you can adjust this or remove it if you're loading real data)
             setTimeout(() => {
-                status.textContent = '';
-                status.className = '';
-            }, 5000);
+                document.querySelector('.preloader').classList.add('fade-out');
+                document.querySelector('.dashboard').classList.add('fade-in');
+                setTimeout(() => {
+                    document.querySelector('.preloader').style.display = 'none';
+                }, 500);
+            }, 2000); // Adjust as needed
+            if (document.querySelector('.nav-tabs button.active').getAttribute('data-tab') === 'employee') {
+                await fetchEmployeeData();
+            }
+        });
+
+        // Parse JWT token and display username
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateRangeButton = document.getElementById('dateRangeButton');
+            dateRangeButton.textContent = getCurrentWeekDateRange();
+            const morePerformersBtn = document.getElementById('morePerformersBtn');
+            if (morePerformersBtn) {
+                morePerformersBtn.addEventListener('click', showMorePerformers);
+            }
+
+            const token = localStorage.getItem('idToken');
+            if (token) {
+                const decodedToken = parseJwt(token);
+                const username = decodedToken['cognito:username'];
+                document.getElementById('username').textContent = username;
+            } else {
+                window.location.href = '../login.html';
+            }
+
+            // Drag and drop functionality
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const processFilesButton = document.getElementById('processFilesButton');
+            const progressBarContainer = document.getElementById('progressBarContainer');
+            const progressBar = document.getElementById('progressBar');
+            let filesToProcess = [];
+
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.classList.add('hover');
+            });
+
+            dropArea.addEventListener('dragleave', (e) => {
+                dropArea.classList.remove('hover');
+            });
+
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.classList.remove('hover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            dropArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+
+            function handleFiles(files) {
+                filesToProcess = [];
+                fileList.innerHTML = '';
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                        filesToProcess.push(file);
+                        const listItem = document.createElement('div');
+                        listItem.textContent = file.name;
+                        fileList.appendChild(listItem);
+                    } else {
+                        alert('Only Excel files are allowed.');
+                    }
+                }
+                if (filesToProcess.length > 0) {
+                    processFilesButton.style.display = 'inline-block';
+                } else {
+                    processFilesButton.style.display = 'none';
+                }
+            }
+
+            processFilesButton.addEventListener('click', () => {
+                processExcelFiles(filesToProcess);
+            });
+        });
+
+        // Implement processExcelFiles function with progress bar
+        async function processExcelFiles(files) {
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const progressBar = document.getElementById('progressBar');
+    progressBarContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
+
+    const totalFiles = files.length;
+    let filesProcessed = 0;
+    let allLeads = [];
+
+    // First, read all files and collect all leads
+    for (const file of files) {
+        const fileData = await readExcelFile(file);
+        // Assuming the first row is headers, remove it
+        const leads = fileData.slice(1);
+        allLeads = allLeads.concat(leads);
+
+        filesProcessed++;
+        const progressPercent = Math.round((filesProcessed / totalFiles) * 50); // First half of progress
+        progressBar.style.width = progressPercent + '%';
+        progressBar.textContent = progressPercent + '%';
+    }
+
+    // Fetch all users
+    let users;
+    try {
+        users = await fetchFromAPI('/users');
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        alert('Error fetching users. Please try again.');
+        progressBarContainer.style.display = 'none';
+        return;
+    }
+
+    // Distribute leads among users
+    const leadsPerUser = Math.ceil(allLeads.length / users.length);
+    const distributedLeads = distributeLeadsAmongUsers(allLeads, users.length);
+
+    // Update each user with their leads
+    for (let i = 0; i < users.length; i++) {
+        const userId = users[i].id;
+        const userLeads = distributedLeads[i];
+
+        try {
+            await fetchFromAPI(`/users/${userId}/leads`, 'PATCH', { leads: userLeads });
+        } catch (error) {
+            console.error(`Error updating leads for user ${userId}:`, error);
+            alert(`Error updating leads for a user. Please try again.`);
+            continue;
+        }
+
+        const progressPercent = Math.round(50 + ((i + 1) / users.length) * 50); // Second half of progress
+        progressBar.style.width = progressPercent + '%';
+        progressBar.textContent = progressPercent + '%';
+            }
+
+            alert('Files processed and leads distributed successfully.');
+            progressBarContainer.style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileList').innerHTML = '';
+            document.getElementById('processFilesButton').style.display = 'none';
+        }
+
+        // Helper function to distribute leads among users
+        function distributeLeadsAmongUsers(leads, numUsers) {
+            const shuffled = leads.sort(() => 0.5 - Math.random());
+            const leadsPerUser = Math.ceil(leads.length / numUsers);
+            const result = [];
+
+            for (let i = 0; i < numUsers; i++) {
+                result.push(shuffled.slice(i * leadsPerUser, (i + 1) * leadsPerUser));
+            }
+
+            return result;
+        }
+
+        // Function to read Excel file
+        function readExcelFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, {type: 'binary'});
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header:1});
+                    resolve(jsonData);
+                };
+                reader.onerror = function(ex) {
+                    reject(ex);
+                };
+                reader.readAsBinaryString(file);
+            });
+        }
+
+        // Function to get users from AWS DocumentDB via Lambda function
+        async function getUsersFromAWS() {
+            try {
+                const users = await callLambda('getUsers', {}); // Adjust function name as needed
+                return users;
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                throw error;
+            }
+        }
+
+        // Function to assign arrays to users
+        async function assignArraysToUsers(arrays) {
+            for (const array of arrays) {
+                const userId = array.user.id; // Adjust according to your user data
+                // Save the data via Lambda function
+                await saveDataForUser(userId, array);
+            }
+        }
+
+        // Function to save data for a user via Lambda function
+        async function saveDataForUser(userId, array) {
+            try {
+                const payload = {
+                    userId: userId,
+                    fileName: array.name,
+                    data: array.data
+                };
+                await callLambda('saveUserData', payload); // Adjust function name as needed
+            } catch (error) {
+                console.error(`Error saving data for user ${userId}:`, error);
+                throw error;
+            }
+        }
+
+        // Function to parse JWT token
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Function to switch tabs
+        function switchTab(tabId) {
+            const allTabs = document.querySelectorAll('.tab-content');
+            const allButtons = document.querySelectorAll('.nav-tabs button');
+            
+            // First, start the fade-out for all tabs
+            allTabs.forEach(tab => {
+                tab.style.opacity = '0';
+                tab.style.transform = 'translateY(20px)';
+            });
+
+            // Remove active class from all buttons
+            allButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Add active class to the clicked button
+            const targetButton = document.querySelector(`.nav-tabs button[data-tab="${tabId}"]`);
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+
+            // After a short delay, update the active tab and start the fade-in
+            setTimeout(() => {
+                allTabs.forEach(tab => tab.classList.remove('active'));
+                const targetTab = document.getElementById(tabId);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                    // Trigger reflow to ensure the transition applies
+                    void targetTab.offsetWidth;
+                    targetTab.style.opacity = '1';
+                    targetTab.style.transform = 'translateY(0)';
+                }
+
+                if (tabId === 'employee') {
+                    fetchEmployeeData();
+                    createEmployeeBreakdownChart();
+                }
+            }, 300); // This delay should match the transition duration
+        }
+
+        // Function to show more performers
+        function showMorePerformers() {
+            switchTab('employee');
+        }
+
+        // Function to fetch employee data
+        async function fetchEmployeeData() {
+            try {
+                const data = await callLambda('getEmployeeData', {});
+                
+                // Populate the table
+                const tableBody = document.getElementById('employeeData');
+                tableBody.innerHTML = ''; // Clear existing data
+                data.forEach(employee => {
+                    const row = tableBody.insertRow();
+                    // Adjust according to your data structure
+                    const rankCell = row.insertCell(0);
+                    const rankSpan = document.createElement('span');
+                    rankSpan.className = 'rank';
+                    if (employee.rank === 1) rankSpan.classList.add('gold');
+                    else if (employee.rank === 2) rankSpan.classList.add('silver');
+                    else if (employee.rank === 3) rankSpan.classList.add('bronze');
+                    rankSpan.textContent = employee.rank;
+                    rankCell.appendChild(rankSpan);
+
+                    const nameCell = row.insertCell(1);
+                    const img = document.createElement('img');
+                    img.src = employee.avatarUrl || '../images/default-avatar.png';
+                    img.alt = employee.name;
+                    img.className = 'avatar';
+                    nameCell.appendChild(img);
+                    nameCell.appendChild(document.createTextNode(employee.name));
+                    row.insertCell(2).textContent = employee.xp;
+                    const engagementCell = row.insertCell(3);
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    const progress = document.createElement('div');
+                    progress.style.width = employee.engagement + '%';
+                    progressBar.appendChild(progress);
+                    engagementCell.appendChild(progressBar);
+                    engagementCell.appendChild(document.createTextNode(' ' + employee.engagement + '%'));
+                    const trendCell = row.insertCell(4);
+                    const trendSpan = document.createElement('span');
+                    trendSpan.className = 'trend';
+                    trendSpan.classList.add(employee.trend > 0 ? 'up' : (employee.trend < 0 ? 'down' : 'neutral'));
+                    trendSpan.textContent = employee.trend > 0 ? `↑ ${employee.trend}%` : (employee.trend < 0 ? `↓ ${Math.abs(employee.trend)}%` : '-');
+                    trendCell.appendChild(trendSpan);
+                });
+            } catch (error) {
+                console.error('Error fetching employee data:', error);
+                // Display error message to the user
+                const tableBody = document.getElementById('employeeData');
+                const errorRow = tableBody.insertRow();
+                const errorCell = errorRow.insertCell();
+                errorCell.colSpan = 5;
+                errorCell.className = 'error-message';
+                errorCell.textContent = 'Error loading employee data. Please try again later.';
+            }
+        }
+
+        // Function to create employee breakdown chart
+        function createEmployeeBreakdownChart() {
+            // [Your existing code for creating charts]
+        }
+
+        // Function to get current week date range
+        function getCurrentWeekDateRange() {
+            const today = new Date();
+            const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+            const diff = today.getDate() - currentDay + (currentDay === 0 ? -6 : 1); // Adjust when day is Sunday
+            
+            const monday = new Date(today.setDate(diff));
+            const friday = new Date(today.setDate(diff + 4));
+            
+            const formatDate = (date) => {
+                const month = date.getMonth() + 1; // getMonth() returns 0-11
+                const day = date.getDate();
+                return `${month}/${day}`;
+            };
+            
+            return `${formatDate(monday)} - ${formatDate(friday)}`;
         }
     </script>
 </body>

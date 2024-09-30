@@ -829,8 +829,19 @@
 
             <div class="tab-content" id="admin">
                 <div class="card" style="width: 100%;">
-                    <h2>Admin Tab Content</h2>
-                    <p>This is where admin-specific content would go.</p>
+                    <h2>Admin Panel</h2>
+                    <div class="company-code-section">
+                        <h3>Company Code Management</h3>
+                        <button id="generateCodeBtn" class="btn-primary">Generate New Company Code</button>
+                        <div id="companyCodeDisplay" style="margin-top: 20px; display: none;">
+                            <p>New Company Code: <strong id="newCompanyCode"></strong></p>
+                            <p>Expires in: <span id="codeExpiration"></span></p>
+                        </div>
+                        <div id="activeCodesList" style="margin-top: 20px;">
+                            <h4>Active Company Codes</h4>
+                            <ul id="activeCodesUl"></ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -839,32 +850,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.799.0/aws-sdk.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // AWS Configuration
-        AWS.config.region = 'your-region';
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'your-identity-pool-id',
-        });
+        const API_ENDPOINT = 'https://ns3ppp4xch.execute-api.us-east-1.amazonaws.com/employercode';
 
-        // Function to call AWS Lambda
-        async function callLambda(functionName, payload) {
-            const lambda = new AWS.Lambda();
-            const params = {
-                FunctionName: functionName,
-                Payload: JSON.stringify(payload)
+        async function callAPI(path, method, payload = null) {
+            const url = `${API_ENDPOINT}${path}`;
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             };
 
+            if (payload) {
+                options.body = JSON.stringify(payload);
+            }
+
             try {
-                const data = await lambda.invoke(params).promise();
-                return JSON.parse(data.Payload);
+                const response = await fetch(url, options);
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'API call failed');
+                }
+                return data;
             } catch (error) {
-                console.error(`Error calling Lambda function ${functionName}:`, error);
+                console.error(`Error calling API ${path}:`, error);
                 throw error;
             }
         }
 
         async function fetchEmployeeData() {
             try {
-                const data = await callLambda('getEmployeeData', {});
+                const data = await callAPI('/getEmployeeData', 'GET');
                 
                 // Populate the table
                 const tableBody = document.getElementById('employeeData');
@@ -884,6 +900,44 @@
                 errorCell.colSpan = 3;
                 errorCell.className = 'error-message';
                 errorCell.textContent = 'Error loading employee data. Please try again later.';
+            }
+        }
+
+        async function generateCompanyCode() {
+            try {
+                const token = localStorage.getItem('idToken');
+                const decodedToken = parseJwt(token);
+                const employerId = decodedToken.sub;
+
+                const response = await callAPI('/generateCode', 'POST', { employerId });
+                if (response.code) {
+                    document.getElementById('newCompanyCode').textContent = response.code;
+                    document.getElementById('codeExpiration').textContent = response.expiresIn;
+                    document.getElementById('companyCodeDisplay').style.display = 'block';
+                    fetchActiveCodes();
+                } else {
+                    console.error('Failed to generate company code');
+                }
+            } catch (error) {
+                console.error('Error generating company code:', error);
+            }
+        }
+        async function fetchActiveCodes() {
+            try {
+                const token = localStorage.getItem('idToken');
+                const decodedToken = parseJwt(token);
+                const employerId = decodedToken.sub;
+
+                const response = await callAPI(`/getActiveCodes?employerId=${employerId}`, 'GET');
+                const activeCodesUl = document.getElementById('activeCodesUl');
+                activeCodesUl.innerHTML = ''; // Clear existing list
+                response.codes.forEach(code => {
+                    const li = document.createElement('li');
+                    li.textContent = `${code.code} (Expires: ${code.expiresAt})`;
+                    activeCodesUl.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching active codes:', error);
             }
         }
 
@@ -918,6 +972,19 @@
 
         // Parse JWT token and display username
         document.addEventListener("DOMContentLoaded", function() {
+            const generateCodeBtn = document.getElementById('generateCodeBtn');
+            if (generateCodeBtn) {
+                generateCodeBtn.addEventListener('click', generateCompanyCode);
+            }
+
+            // Fetch active codes when the admin tab is opened
+            document.querySelectorAll('.nav-tabs button').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.getAttribute('data-tab') === 'admin') {
+                        fetchActiveCodes();
+                    }
+                });
+            });
             const dateRangeButton = document.getElementById('dateRangeButton');
             dateRangeButton.textContent = getCurrentWeekDateRange();
             const morePerformersBtn = document.getElementById('morePerformersBtn');
@@ -949,6 +1016,7 @@
             }).join(''));
             return JSON.parse(jsonPayload);
         }
+
         function switchTab(tabId) {
             const allTabs = document.querySelectorAll('.tab-content');
             const allButtons = document.querySelectorAll('.nav-tabs button');
